@@ -1,4 +1,7 @@
-#include <ezama.h>
+#include <Ezama.h>
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include "Adafruit_BME680.h"
 
 
 // 1 INITIALIZE DEVICE PARTICULAR CONSTANTS & VARIABLES
@@ -28,6 +31,7 @@ void publish_reporting_json() {
   state_json["press_hPa"] = p;
   state_json["humidity_pct"] = h;
   state_json["gas_r_kOhm"] = g;
+  state_json["descript"] = descript;
   serializeJson(state_json, output);
   output.toCharArray(sj, 1024);
   client.publish(topic.c_str(), sj);

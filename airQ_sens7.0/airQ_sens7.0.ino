@@ -1,5 +1,6 @@
-#include <ezama.h>
-
+#include <Ezama.h>
+#include <Wire.h>
+#include "Adafruit_PM25AQI.h"
 
 // 1 INITIALIZE DEVICE PARTICULAR CONSTANTS & VARIABLES
 String type = "air qual sens";
@@ -26,6 +27,7 @@ void publish_reporting_json() {
   state_json["IP"] = WiFi.localIP();
   state_json["pm25_env"] = pm25_env;
   state_json["pm100_env"] = pm100_env;
+  state_json["descript"] = descript;
   serializeJson(state_json, output);
   output.toCharArray(sj, 1024);
   client.publish(topic.c_str(), sj);
@@ -69,6 +71,7 @@ void setup() {
   if (! aqi.begin_I2C()) {
     Serial.println(F("Could not find PM 2.5 sensor!"));
     while (1) delay(10);
+  }
 
 }
 

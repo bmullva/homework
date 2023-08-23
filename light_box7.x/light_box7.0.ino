@@ -1,4 +1,4 @@
-#include <ezama.h>
+#include <Ezama.h>
 
 
 // 1 INITIALIZE DEVICE PARTICULAR CONSTANTS & VARIABLES
@@ -29,6 +29,7 @@ void publish_reporting_json() {
   state_json["p1"] = p_array[0];
   state_json["p2"] = p_array[1];
   state_json["p3"] = p_array[2];
+  state_json["descript"] = descript;
   serializeJson(state_json, output);
   output.toCharArray(sj, 1024);
   client.publish(topic.c_str(), sj);

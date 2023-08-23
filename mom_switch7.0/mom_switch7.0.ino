@@ -1,4 +1,4 @@
-#include <Ezama2.h>
+#include <Ezama.h>
 
 
 // 1 INITIALIZE DEVICE PARTICULAR CONSTANTS & VARIABLES
@@ -31,6 +31,7 @@ void publish_reporting_json() {
   state_json["IP"] = WiFi.localIP();
   state_json["pin"]= "[p14,p12,p13]";
   state_json["action"] = "[click, dbl-click, hold, release]";
+  state_json["descript"] = descript;
   serializeJson(state_json, output);
   output.toCharArray(sj, 1024);
   client.publish(topic.c_str(), sj);

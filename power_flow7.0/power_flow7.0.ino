@@ -1,4 +1,5 @@
-#include <ezama.h>
+#include <Ezama.h>
+#include <Filters.h>
 
 
 // 1 INITIALIZE DEVICE PARTICULAR CONSTANTS & VARIABLES
@@ -30,13 +31,15 @@ void publish_reporting_json() {
   state_json["type"] = type;
   state_json["ver"] = ver;
   state_json["IP"] = WiFi.localIP();
-  state_json["watt"] = watt;
+  state_json["A"] = Amps_TRMS;
+  state_json["Ah"] = amp_hour;
   if (digitalRead(13) == 0) {
     state_json["power_switch"] = "on";
   }
   if (digitalRead(13) == 1) {
     state_json["power_switch"] = "off";
   }
+  state_json["descript"] = descript;
   serializeJson(state_json, output);
   output.toCharArray(sj, 1024);
   client.publish(topic.c_str(), sj);

@@ -1,14 +1,17 @@
-#include <ezama.h>
+#include <Ezama.h>
+#include <OneWire.h>
+#include <DallasTemperature.h>
 
 
 // 1 INITIALIZE DEVICE PARTICULAR CONSTANTS & VARIABLES
-String type = "water flow sens";
+String type = "temp sens";
 String ver = "7.0";
 
-volatile int pulses = 0;    // count pulses
-void ICACHE_RAM_ATTR isr() { // ISR to increment count variable when pin goes high
-  pulses++;
-}
+#define ONE_WIRE_BUS 14
+OneWire oneWire(ONE_WIRE_BUS);
+DallasTemperature sensors(&oneWire);
+float t;
+
 
 
 // 2 REPORT (SENT EVERY 6 SECONDS)
@@ -21,7 +24,8 @@ void publish_reporting_json() {
   state_json["type"] = type;
   state_json["ver"] = ver;
   state_json["IP"] = WiFi.localIP();
-  state_json["liters"] = liters;
+  state_json["temp_C"] = t;
+  state_json["descript"] = descript;
   serializeJson(state_json, output);
   output.toCharArray(sj, 1024);
   client.publish(topic.c_str(), sj);
@@ -30,7 +34,7 @@ void publish_reporting_json() {
   Serial.print(sj);
 }
 
-// sensor, controller, actuator, actuator-sensor
+
 // 3 REPORT ID: "mqtt_pub -h XXX.XXX.XXX.XXX -m ids -t broadcast"
 void publish_ids_json() {
   String output;
@@ -39,7 +43,7 @@ void publish_ids_json() {
   String topic = "broadcast";
   state_json["device_id"] = device_id;
   state_json["type"] = type;
-  state_json["cat"] = "sensor, actuator"; // sensor, controller, actuator
+  state_json["cat"] = "sensor";  // sensor, controller, actuator
   serializeJson(state_json, output);
   output.toCharArray(sj, 1024);
   client.publish(topic.c_str(), sj);
@@ -49,17 +53,6 @@ void publish_ids_json() {
 // 4 RECEIVE CONTROLS (to this exact device, from callback)
 void receive_controls_json(String messageTemp) {
   if(messageTemp == "restart") {ESP.restart();}
-  
-     if(messageTemp == "on") {
-    digitalWrite(13, HIGH);
-    Serial.print("Writing 13 to HIGH");
-   }
-
-   if(messageTemp == "off") {
-    digitalWrite(13, LOW);
-    Serial.print("Writing 13 to LOW");
-   }   
-  
 }
 
 
@@ -74,7 +67,7 @@ void setup() {
   ezama_setup();  //in ezama.h
   
   pinMode(14, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(14), isr, RISING); // Attach ISR to pin's rising edge interrupt
+  sensors.begin();
 
 }
 
@@ -83,15 +76,8 @@ void setup() {
 void loop() {
   ezama_loop();  //in ezama.h
   
-  // plastic sensor: use following calculation
-  // Sensor Frequency (Hz) = 7.5 * Q (Liters/min)
-  // Liters = Q * time elapsed (seconds) / 60 (seconds/minute)
-  // Liters = (Frequency (Pulses/second) / 7.5) * time elapsed (seconds) / 60
-  // Liters = Pulses / (7.5 * 60)
-  liters = pulses;
-  liters /= 7.5;
-  liters /= 60.0;
-  
+  sensors.requestTemperatures(); // Send the command to get temperatures
+  t = sensors.getTempCByIndex(0);
   delay(1000);
   
 }

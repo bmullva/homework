@@ -1,24 +1,15 @@
-#include <ezama.h>
+#include <Ezama.h>
+#include <Adafruit_INA260.h>
 
 
 // 1 INITIALIZE DEVICE PARTICULAR CONSTANTS & VARIABLES
-String type = "depth sens";
+String type = "current sens";
 String ver = "7.0";
 
-const int a_pin = A0;
-const char* a_pin_name = "ft depth";
-int a_pin_reading = 0;  
-int a_pin_n1_reading = 0;
-float a_pin_reading2state(float n) {
-  float v = n*3.3/1024.0;
-  float psi = 7.5*v-3.75;
-  float ft = 2.3*psi;
-  float ft_rel = ft-.5;
-  return ft_rel;
-}
-float depth;
-float depth_array [20] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-int array_int = 0; 
+Adafruit_INA260 ina260 = Adafruit_INA260();
+float current {};
+float voltage {};
+float power {};
 
 
 // 2 REPORT (SENT EVERY 6 SECONDS)
@@ -30,8 +21,11 @@ void publish_reporting_json() {
   state_json["device_id"] = device_id;
   state_json["type"] = type;
   state_json["ver"] = ver;
-  state_json["IP"] = WiFi.localIP();  
-  state_json["depth"] = depth;  
+  state_json["IP"] = WiFi.localIP();
+  state_json["current_mA"] = current;
+  state_json["voltage_mV"] = voltage;
+  state_json["power_mW"] = power;
+  state_json["descript"] = descript;
   serializeJson(state_json, output);
   output.toCharArray(sj, 1024);
   client.publish(topic.c_str(), sj);
@@ -72,7 +66,10 @@ void publish_controls_json(String pin_name, String pin_msg) {
 void setup() { 
   ezama_setup();  //in ezama.h
   
-  pinMode(A0, INPUT_PULLUP);
+  if (!ina260.begin()) {
+    Serial.println("Couldn't find INA260 chip");
+    while (1);
+  }
 
 }
 
@@ -81,15 +78,10 @@ void setup() {
 void loop() {
   ezama_loop();  //in ezama.h
   
-  a_pin_reading  = analogRead(A0);
-  float dpth = a_pin_reading2state(a_pin_reading);
-  depth_array[array_int] = dpth;
-  array_int += 1;
-  float d = 0;
-  int i;
-  for (i=0; i<20; i++) {d += depth_array[i];}
-  depth = d / 20;
-  if (array_int == 20) {array_int = 0;}  
+  current = ina260.readCurrent();
+  voltage = ina260.readBusVoltage();
+  power = ina260.readPower();
+
   delay(1000);
-  
+
 }
