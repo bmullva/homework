@@ -1,9 +1,9 @@
-#include <Ezama.h>  // This is for a DOIT ESP32 DEVKIT V1 with 30 pins
+#include <Ezama.h>  // This is for an DOIT ESP32 DEVKIT V1 Mod with 30 pins
 #include <Filters.h>
 
 
 // 1 INITIALIZE DEVICE PARTICULAR CONSTANTS & VARIABLES
-String type = "AC 60 Circuit";
+String type = "AC 20 Circuit";
 String ver = "7.2";
 
 float Amps1_TRMS {};
@@ -20,10 +20,11 @@ float amphour4 = 0;
 float amphour5 = 0;
 float amphour6 = 0;
 
+
 float testFrequency = 60;
 float windowLength = 40.0/testFrequency;
-float b1 = -8938.656737;
-float b2 = 612.927984;
+float b1 = 9.317;
+float b2 = .2077;
 
 unsigned long printPeriod = 2000; // in milliseconds
 unsigned long previousMillis = 0;
