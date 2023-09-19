@@ -49,11 +49,10 @@ void setup(void) {
   Serial.print(F("Hello! ST77xx TFT Test"));
 
   // if the display has CS pin try with SPI_MODE0
-  //tft.init(128, 160, SPI_MODE0);
-  tft.init(240, 240, SPI_MODE0);    // Init ST7789 display 240x240 pixel
+  tft.init(240, 320, SPI_MODE0);    // Init ST7789 display 240x240 pixel
 
   // if the screen is flipped, remove this command
-  tft.setRotation(1);  // 0-no rotation, 1-90 deg, 2-180deg, 3-270deg;
+  tft.setRotation(1);
 
   Serial.println(F("Initialized"));
 
@@ -65,9 +64,16 @@ void setup(void) {
   delay(500);
 
   // large block of text
+  tft.setCursor(0, 0);
   tft.fillScreen(ST77XX_BLACK);
-  testdrawtext("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur adipiscing ante sed nibh tincidunt feugiat. Maecenas enim massa, fringilla sed malesuada et, malesuada sit amet turpis. Sed porttitor neque ut ante pretium vitae malesuada nunc bibendum. Nullam aliquet ultrices massa eu hendrerit. Ut sed nisi lorem. In vestibulum purus a tortor imperdiet posuere. ", ST77XX_WHITE);
-  delay(1000);
+  testdrawtext("I am writing a large", ST77XX_WHITE);
+  tft.setCursor(0, 12);
+  testdrawtext("piece of text.  The", ST77XX_WHITE);
+  //testdrawtext("purpose of this text is", ST77XX_WHITE);
+  //testdrawtext("to successfully", ST77XX_WHITE);
+  //testdrawtext("demonstrate the width of", ST77XX_WHITE);
+  //testdrawtext("the screen. ", ST77XX_WHITE);
+  delay(30000);
 
   // tft print function!
   tftPrintTest();
@@ -159,7 +165,7 @@ void testlines(uint16_t color) {
 }
 
 void testdrawtext(char *text, uint16_t color) {
-  tft.setCursor(0, 0);
+  //tft.setCursor(0, 0);
   tft.setTextColor(color);
   tft.setTextWrap(true);
   tft.print(text);
