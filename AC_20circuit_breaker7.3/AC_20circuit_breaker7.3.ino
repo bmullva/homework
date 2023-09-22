@@ -4,7 +4,7 @@
 
 // 1 INITIALIZE DEVICE PARTICULAR CONSTANTS & VARIABLES
 String type = "AC 20 Circuit";
-String ver = "7.2";
+String ver = "7.3";
 
 float Amps1_TRMS {};
 float Amps2_TRMS {};
