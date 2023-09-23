@@ -1,5 +1,4 @@
 
-
 #include <WiFi.h>
 #include <ESPAsyncWebServer.h>
 #include <EEPROM.h>
@@ -9,6 +8,7 @@
 #include <map>
 #include <TFT_eSPI.h>
 #include <SPI.h>
+#include <Filters.h>
 
 
 // INITIALIZE DEVICE PARTICULAR CONSTANTS & VARIABLES
@@ -29,13 +29,20 @@ float amphour4 = 0;
 float amphour5 = 0;
 float amphour6 = 0;
 
+String slg1;
+String slg2;
+String slg3;
+String slg4;
+String slg5;
+String slg6;
+
 
 float testFrequency = 60;
 float windowLength = 40.0/testFrequency;
 float b1 = 9.317;
 float b2 = .2077;
 
-unsigned long printPeriod = 5000; // in milliseconds
+unsigned long printPeriod = 2000; // in milliseconds
 unsigned long previousMillis = 0;
 
 float s2a(float x) {
@@ -117,19 +124,19 @@ void setup() {
     ArduinoOTA.begin();
     initialize_pins();
 
-    WiFi.begin(ssid, password);
+    WiFi.begin(network_id, password);
     while (WiFi.status() != WL_CONNECTED) {
       delay(1000);
       Serial.println("Connecting to WiFi...");
     }
     Serial.println("Connected to WiFi");
-    // Define the handler for the /getPreviousMillis endpoint
-    server.on("/getPreviousMillis", HTTP_GET, handleGetPreviousMillis);
-    server.on("/setAction", HTTP_GET, handleSetAction);
-    // Serve the main HTML page
-    server.on("/", HTTP_GET, handleRoot);
-    // Start the web server
+
     server.begin();
+    server.on("/getAmps1_TRMS", HTTP_GET, handleGetAmps_TRMS);
+    server.on("/getAmps2_TRMS", HTTP_GET, handleGetAmps_TRMS);
+    server.on("/setAction1", HTTP_GET, [](AsyncWebServerRequest *request){handleSetAction1(request);});
+    server.on("/setAction2", HTTP_GET, [](AsyncWebServerRequest *request){handleSetAction2(request);});
+
     Serial.println(WiFi.localIP());
   }
 }
@@ -165,7 +172,7 @@ void loop() {
         stats6.input(analogRead(33));
       }
 
-      if((unsigned long)(millis() - previousMillis) >= printPeriod) { //every 5 second we do the calculation
+      if((unsigned long)(millis() - previousMillis) >= printPeriod) { //every 2 seconds we do the calculation
         previousMillis = millis();   // update time
 
         Amps1_TRMS = s2a(stats1.sigma());
@@ -183,7 +190,7 @@ void loop() {
         amphour6 += Amps6_TRMS * 2/3600;
       }
     }
-    delay(5000);
+    delay(50);
   }
 
 } 
