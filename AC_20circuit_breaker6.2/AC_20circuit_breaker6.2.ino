@@ -15,12 +15,12 @@
 String type = "AC20 circuit break";
 String ver = "6.2";
 
-float Amps1_TRMS {};
-float Amps2_TRMS {};
-float Amps3_TRMS {};
-float Amps4_TRMS {};
-float Amps5_TRMS {};
-float Amps6_TRMS {};
+float Amps1_TRMS = 0;
+float Amps2_TRMS = 0;
+float Amps3_TRMS = 0;
+float Amps4_TRMS = 0;
+float Amps5_TRMS = 0;
+float Amps6_TRMS = 0;
 
 float amphour1 = 0;
 float amphour2 = 0;
@@ -93,6 +93,7 @@ void setup() {
   Serial.begin(115200);
   EEPROM.begin(512);
   delay(1000);
+  Serial.println("I am now in setup");
   
   tft.init();
   tft.setRotation(1);
@@ -107,6 +108,7 @@ void setup() {
   
   if (setting=='s') {
     WiFi.softAP(ssid_s, password_s);
+    Serial.println("I am now calling def_server()");
     def_server();
     }
 
@@ -131,11 +133,26 @@ void setup() {
     }
     Serial.println("Connected to WiFi");
 
-    server.begin();
     server.on("/getAmps1_TRMS", HTTP_GET, handleGetAmps_TRMS);
     server.on("/getAmps2_TRMS", HTTP_GET, handleGetAmps_TRMS);
-    server.on("/setAction1", HTTP_GET, [](AsyncWebServerRequest *request){handleSetAction1(request);});
-    server.on("/setAction2", HTTP_GET, [](AsyncWebServerRequest *request){handleSetAction2(request);});
+    //server.on("/setAction1", HTTP_GET, [](AsyncWebServerRequest *request){handleSetAction1(request);});
+    //server.on("/setAction2", HTTP_GET, [](AsyncWebServerRequest *request){handleSetAction2(request);});
+
+    server.on("/getAmps1_TRMS", HTTP_GET, [](AsyncWebServerRequest *request){
+    // Here, you should provide the actual code to fetch Amps1_TRMS data.
+    // Replace the following line with code to fetch the real data.
+    String response = "Actual Amps1_TRMS data"; 
+    request->send(200, "text/plain", response);
+  });
+
+  server.on("/getAmps2_TRMS", HTTP_GET, [](AsyncWebServerRequest *request){
+    // Here, you should provide the actual code to fetch Amps2_TRMS data.
+    // Replace the following line with code to fetch the real data.
+    String response = "Actual Amps2_TRMS data"; 
+    request->send(200, "text/plain", response);
+  });
+    
+    server.begin();
 
     Serial.println(WiFi.localIP());
   }

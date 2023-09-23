@@ -53,6 +53,7 @@ String processor(const String& var){
 
 
 void def_server() {
+    
     IPAddress myIP = WiFi.softAPIP();    
     server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
       if (request->hasParam("input1") && request->hasParam("input2")) {
