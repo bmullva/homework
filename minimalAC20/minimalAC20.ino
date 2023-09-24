@@ -10,7 +10,9 @@ AsyncWebServer server(80);
 //bool isCounting = false;
 unsigned int counter = 0;
 
-float Amps1_TRMS = 10.0;
+float Amps1_TRMS = 5.0;
+unsigned long previousMillis = 0;
+const long interval = 2000; 
 
 bool gpio25State = false; // Variable to track the state of GPIO25
 bool gpio33State = false;  // Initialize GPIO33 as HIGH
@@ -35,5 +37,23 @@ void setup() {
 }
 
 void loop() {
+  unsigned long currentMillis = millis();
 
+  if (currentMillis - previousMillis >= interval) {
+    previousMillis = currentMillis;
+    switch (static_cast<int>(Amps1_TRMS)) {
+      case 5:
+        Amps1_TRMS = 10.0;
+        break;
+      case 10:
+        Amps1_TRMS = 15.0;
+        break;
+      case 15:
+        Amps1_TRMS = 20.0;
+        break;
+      case 20:
+        Amps1_TRMS = 5.0;  // Reset back to 5
+        break;
+    }
+  }
 }

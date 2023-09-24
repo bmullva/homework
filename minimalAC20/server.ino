@@ -85,12 +85,49 @@ page += R"(>
 page += String(ampsValue);
 
 page += R"(' min='0' max='1' low='0.2' high='0.8' optimum='1.0'></meter></h1>
+
+    <h1>Amps1_TRMS: <meter value="0" min="0" max="1" low="0.2" high="0.8" optimum="1.0"></meter></h1>
+    <span id="ampsValue"></span>
+
+
+<script>
+  // Function to update the <meter> element with the ampsValue
+  function updateAmpsValue() {
+    fetch('/getAmpsValue')
+      .then(response => response.text())
+      .then(value => {
+        // Update the <meter> element's value attribute
+        const meterElement = document.querySelector('meter');
+        meterElement.value = parseFloat(value);
+
+        // Update the span with the current value
+        const spanElement = document.getElementById('ampsValue');
+        spanElement.textContent = 'Current Amps Value: ' + value;
+
+        setTimeout(updateAmpsValue, 1000); // Fetch and update every second
+      })
+      .catch(error => {
+        console.error('Error fetching ampsValue:', error);
+        setTimeout(updateAmpsValue, 1000); // Retry after 1 second on error
+      });
+  }
+
+  // Initial call to start updating
+  updateAmpsValue();
+</script>
+
+
+
       <script>
         var gpio33Checkbox = document.getElementById('toggleGPIO33');
         gpio33Checkbox.addEventListener('change', function() {
           fetch('/toggleGPIO33?state=' + (gpio33Checkbox.checked ? 'on' : 'off'));
         });
       </script>
+
+
+
+      
     </body>
     </html>
   )";
@@ -99,6 +136,13 @@ page += R"(' min='0' max='1' low='0.2' high='0.8' optimum='1.0'></meter></h1>
     request->send(200, "text/html", page);
   });
 
+  server.on("/getAmpsValue", HTTP_GET, [](AsyncWebServerRequest *request){
+    // Calculate the value of Amps1_TRMS divided by 20.0
+    float ampsValue = Amps1_TRMS / 20.0;
+    // Ensure the value is within the valid range for <meter>
+    ampsValue = constrain(ampsValue, 0.0, 1.0);
+    request->send(200, "text/plain", String(ampsValue));
+  });
 
   server.on("/toggleGPIO33", HTTP_GET, [](AsyncWebServerRequest *request){
     if (request->hasArg("state")) {
