@@ -10,6 +10,8 @@ AsyncWebServer server(80);
 //bool isCounting = false;
 unsigned int counter = 0;
 
+float Amps1_TRMS = 10.0;
+
 bool gpio25State = false; // Variable to track the state of GPIO25
 bool gpio33State = false;  // Initialize GPIO33 as HIGH
 
@@ -27,12 +29,11 @@ void setup() {
   Serial.println("Connected to WiFi");
   Serial.println(WiFi.localIP());
 
-  pinMode(25, INPUT_PULLUP); // Set GPIO25 as input with pull-up
   pinMode(33, OUTPUT);      // Set GPIO33 as output
 
   define_page();
 }
 
 void loop() {
-  //delay(50); // Update counter every second
+
 }
