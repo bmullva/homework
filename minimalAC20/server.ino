@@ -67,74 +67,74 @@ void define_page() {
     }
     </style>
     </head>
+
+
+
     <body>
-      <h1>GPIO33: <span id='gpio33'></span></h1>
+    <h1><span id='gpio33'></span>
       <div class="switch-container">
-        <label class="switch">
-          <input type='checkbox' id='toggleGPIO33')";
+        Ch 1 : <meter value=')";
+      
+    page += String(ampsValue);
+
+    page += R"(' min='0' max='1'></meter>
+      <label class="switch">
+      <input type='checkbox' id='toggleGPIO33')";
           
-page += gpio33State ? "checked" : "";
+    page += gpio33State ? "checked" : "";
 
-page += R"(>
-          <span class="slider"></span>
-        </label>
-        <label for='toggleGPIO33'>Toggle GPIO33</label>
+    page += R"(>
+      <span class="slider"></span>
+      </label>
       </div>
-      <h1>Amps1_TRMS: <meter value=')";
-      
-page += String(ampsValue);
-
-page += R"(' min='0' max='1' low='0.2' high='0.8' optimum='1.0'></meter></h1>
-
-    <h1>Amps1_TRMS: <meter value="0" min="0" max="1" low="0.2" high="0.8" optimum="1.0"></meter></h1>
-    <span id="ampsValue"></span>
+    </h1>
 
 
-<script>
-  // Function to update the <meter> element with the ampsValue
-  function updateAmpsValue() {
-    fetch('/getAmpsValue')
-      .then(response => response.text())
-      .then(value => {
-        // Update the <meter> element's value attribute
-        const meterElement = document.querySelector('meter');
-        meterElement.value = parseFloat(value);
 
-        // Update the span with the current value
-        const spanElement = document.getElementById('ampsValue');
-        spanElement.textContent = 'Current Amps Value: ' + value;
+    <script>
+      // Function to update the <meter> element with the ampsValue
+      function updateAmpsValue() {
+        fetch('/getAmpsValue')
+          .then(response => response.text())
+          .then(value => {
+            // Update the <meter> element's value attribute
+            const meterElement = document.querySelector('meter');
+            meterElement.value = parseFloat(value);
+    
+            // Update the span with the current value
+            const spanElement = document.getElementById('ampsValue');
+    
+            setTimeout(updateAmpsValue, 1000); // Fetch and update every second
+          })
+          .catch(error => {
+            console.error('Error fetching ampsValue:', error);
+            setTimeout(updateAmpsValue, 1000); // Retry after 1 second on error
+          });
+      }
+    
+      // Initial call to start updating
+      updateAmpsValue();
+    </script>
 
-        setTimeout(updateAmpsValue, 1000); // Fetch and update every second
-      })
-      .catch(error => {
-        console.error('Error fetching ampsValue:', error);
-        setTimeout(updateAmpsValue, 1000); // Retry after 1 second on error
+
+    <script>
+      var gpio33Checkbox = document.getElementById('toggleGPIO33');
+      gpio33Checkbox.addEventListener('change', function() {
+        fetch('/toggleGPIO33?state=' + (gpio33Checkbox.checked ? 'on' : 'off'));
       });
-  }
-
-  // Initial call to start updating
-  updateAmpsValue();
-</script>
+    </script>
 
 
-
-      <script>
-        var gpio33Checkbox = document.getElementById('toggleGPIO33');
-        gpio33Checkbox.addEventListener('change', function() {
-          fetch('/toggleGPIO33?state=' + (gpio33Checkbox.checked ? 'on' : 'off'));
-        });
-      </script>
-
-
-
-      
     </body>
     </html>
   )";
 
+
+
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){    
     request->send(200, "text/html", page);
   });
+
 
   server.on("/getAmpsValue", HTTP_GET, [](AsyncWebServerRequest *request){
     // Calculate the value of Amps1_TRMS divided by 20.0
@@ -144,11 +144,12 @@ page += R"(' min='0' max='1' low='0.2' high='0.8' optimum='1.0'></meter></h1>
     request->send(200, "text/plain", String(ampsValue));
   });
 
+
   server.on("/toggleGPIO33", HTTP_GET, [](AsyncWebServerRequest *request){
     if (request->hasArg("state")) {
       String state = request->arg("state");
       gpio33State = (state == "on");
-      digitalWrite(33, gpio33State ? HIGH : LOW); // Set GPIO33 state
+      digitalWrite(33, gpio33State ? LOW : HIGH); // Set GPIO33 state
     }
     request->send(200, "text/plain", gpio33State ? "on" : "off");
   });

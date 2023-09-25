@@ -15,7 +15,7 @@ unsigned long previousMillis = 0;
 const long interval = 2000; 
 
 bool gpio25State = false; // Variable to track the state of GPIO25
-bool gpio33State = false;  // Initialize GPIO33 as HIGH
+bool gpio33State = true;  // Initialize GPIO33 as HIGH
 
 String page;
 
