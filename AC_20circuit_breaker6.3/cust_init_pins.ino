@@ -31,12 +31,6 @@ void initialize_pins() {
   digitalWrite(17, LOW); // SLG 5
   digitalWrite(16, LOW); // SLG 6
 
-  digitalWrite(25, HIGH);
-  digitalWrite(22, HIGH);
-  digitalWrite(21, HIGH);
-  digitalWrite(19, HIGH);
-  digitalWrite(17, HIGH);
-  digitalWrite(16, HIGH);
 }
 
 

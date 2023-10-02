@@ -1,6 +1,4 @@
 void print_vars() {
-  Serial.print("mqtt_ip: ");
-  Serial.println(mqtt_ip);
   Serial.print("device_id: ");
   Serial.println(device_id);
   Serial.print("setting: ");

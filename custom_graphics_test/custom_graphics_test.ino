@@ -103,34 +103,35 @@ void loop() {
 
   tft.fillScreen(TFT_BLACK);
   tft.setTextColor(TFT_YELLOW, TFT_BLACK);
-  tft.print("IP:  ");
+  tft.println("IP:  ");
+  tft.setTextSize(2);
   tft.println(ip_addr);
   tft.println();
 
-  tft.setTextSize(1);
+  tft.setTextSize(2);
   if (true) {tft.setTextColor(TFT_GREEN, TFT_BLACK);}
   else {tft.setTextColor(TFT_RED, TFT_BLACK);}
-  tft.print("1  ");
+  tft.print("1 ");
 
   if (true) {tft.setTextColor(TFT_GREEN, TFT_BLACK);}
   else {tft.setTextColor(TFT_RED, TFT_BLACK);}
-  tft.print("2  ");
+  tft.print("2 ");
   
   if (false) {tft.setTextColor(TFT_GREEN, TFT_BLACK);}
   else {tft.setTextColor(TFT_RED, TFT_BLACK);}
-  tft.print("3  ");
+  tft.print("3 ");
   
   if (true) {tft.setTextColor(TFT_GREEN, TFT_BLACK);}
   else {tft.setTextColor(TFT_RED, TFT_BLACK);}
-  tft.print("4  ");
+  tft.print("4 ");
   
   if (false) {tft.setTextColor(TFT_GREEN, TFT_BLACK);}
   else {tft.setTextColor(TFT_RED, TFT_BLACK);}
-  tft.print("5  ");
+  tft.print("5 ");
   
   if (true) {tft.setTextColor(TFT_GREEN, TFT_BLACK);}
   else {tft.setTextColor(TFT_RED, TFT_BLACK);}
-  tft.println("6  ");
+  tft.println("6 ");
   delay(4000);
   
 

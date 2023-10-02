@@ -1,154 +1,166 @@
 void define_page() {
 
   page = R"(
-    <!DOCTYPE html>
-    <html>
-    <head>
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Toggle Switches</title>
     <style>
-    /* Style the toggle switch container */
-    .switch-container {
-      display: flex;
-      align-items: center;
-      margin-bottom: 20px; /* Add some spacing below the switch */
-    }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            text-align: center; /* Center align content horizontally */
+            margin: 0;
+        }
 
-    /* Style the toggle switch */
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 60px;
-      height: 30px;
-    }
+        /* Updated styling for labels "Ch1" and "Ch2" */
+        .switch-label {
+            margin-right: 10px;
+            font-size: 24px; /* Bigger font size */
+            font-weight: bold; /* Bolder font weight */
+            font-family: 'Arial Black', sans-serif; /* Fancier font */
+            color: #2196F3; /* Blue color */
+            display: inline-block; /* Prevent labels from breaking to new lines */
+        }
 
-    /* Hide the default HTML checkbox */
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
+        .channel {
+            margin-bottom: 20px; /* Add vertical spacing between channels */
+        }
 
-    /* Style the slider (rounded shape) */
-    .slider {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      border-radius: 30px; /* Make it rounded */
-      transition: 0.4s;
-    }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
 
-    /* Style the slider when it's in the "on" state */
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 26px;
-      width: 26px;
-      left: 2px;
-      bottom: 2px;
-      background-color: white;
-      border-radius: 50%;
-      transition: 0.4s;
-    }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
 
-    /* When the checkbox is checked, move the slider to the right */
-    input:checked + .slider {
-      background-color: #2196F3; /* Change to your desired "on" color */
-    }
+        .slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            border-radius: 30px;
+            transition: 0.4s;
+        }
 
-    input:checked + .slider:before {
-      transform: translateX(26px);
-    }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            border-radius: 50%;
+            transition: 0.4s;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Style for the sections */
+        .section {
+            margin-top: 20px; /* Add spacing between sections */
+        }
     </style>
-    </head>
-    <body>
+  </head>
+  <body>
 
-
-    
-    <h1>
-      <div class="switch-container">
-        Ch 1 : <meter id = "meterAmps1" value=')";      
+  <div class="channel">
+    <span class="switch-label">Ch1 :</span> <!-- Updated label for "Ch1" -->
+    <meter id="meterAmps1" value=')";
     page += String(Amps1_TRMS);
     page += R"(' min='0' max='20'></meter>
-      <label class="switch">
+    <label class="switch">
       <input type='checkbox' id='toggleGPIO25')";          
-    page += gpio25State ? "checked" : "";
-    page += R"(>
+      page += gpio25State ? "checked" : "";
+      page += R"(>
       <span class="slider"></span>
-      </label>
-      </div>
-    </h1>
+    </label>
+  </div>
 
-    <h1>
-      <div class="switch-container">
-        Ch 2 : <meter id = "meterAmps2" value=')";     
+  <div class="channel">
+    <span class="switch-label">Ch2 :</span> 
+    <meter id="meterAmps2" value=')";
     page += String(Amps2_TRMS);
     page += R"(' min='0' max='20'></meter>
-      <label class="switch">
+    <label class="switch">
       <input type='checkbox' id='toggleGPIO22')";         
-    page += gpio22State ? "checked" : "";
-    page += R"(>
+      page += gpio22State ? "checked" : "";
+      page += R"(>
       <span class="slider"></span>
-      </label>
-      </div>
-    </h1>
-
-    <h1>
-      <div class="switch-container">
-        Ch 3 : <meter id = "meterAmps3" value=')";     
+    </label>
+  </div>
+    
+    
+  <div class="channel">
+    <span class="switch-label">Ch3 :</span> 
+    <meter id="meterAmps1" value=')";
     page += String(Amps3_TRMS);
     page += R"(' min='0' max='20'></meter>
-      <label class="switch">
+    <label class="switch">
       <input type='checkbox' id='toggleGPIO21')";         
-    page += gpio21State ? "checked" : "";
-    page += R"(>
+      page += gpio21State ? "checked" : "";
+      page += R"(>
       <span class="slider"></span>
-      </label>
-      </div>
-    </h1>
-
-    <h1>
-      <div class="switch-container">
-        Ch 4 : <meter id = "meterAmps4" value=')";     
+    </label>
+  </div>
+      
+  <div class="channel">
+    <span class="switch-label">Ch4 :</span> 
+    <meter id="meterAmps1" value=')";
     page += String(Amps4_TRMS);
     page += R"(' min='0' max='20'></meter>
-      <label class="switch">
+    <label class="switch">
       <input type='checkbox' id='toggleGPIO19')";         
-    page += gpio19State ? "checked" : "";
-    page += R"(>
+      page += gpio19State ? "checked" : "";
+      page += R"(>
       <span class="slider"></span>
-      </label>
-      </div>
-    </h1>
-
-    <h1>
-      <div class="switch-container">
-        Ch 5 : <meter id = "meterAmps5" value=')";     
+    </label>
+  </div>
+      
+  <div class="channel">
+    <span class="switch-label">Ch5 :</span> 
+    <meter id="meterAmps1" value=')";
     page += String(Amps5_TRMS);
     page += R"(' min='0' max='20'></meter>
-      <label class="switch">
+    <label class="switch">
       <input type='checkbox' id='toggleGPIO17')";         
-    page += gpio17State ? "checked" : "";
-    page += R"(>
+      page += gpio17State ? "checked" : "";
+      page += R"(>
       <span class="slider"></span>
-      </label>
-      </div>
-    </h1>
-
-    <h1>
-      <div class="switch-container">
-        Ch 6 : <meter id = "meterAmps6" value=')";     
+    </label>
+  </div>
+      
+  <div class="channel">
+    <span class="switch-label">Ch6 :</span> <!-- Updated label for "Ch1" -->
+    <meter id="meterAmps1" value=')";
     page += String(Amps6_TRMS);
     page += R"(' min='0' max='20'></meter>
-      <label class="switch">
+    <label class="switch">
       <input type='checkbox' id='toggleGPIO16')";         
-    page += gpio16State ? "checked" : "";
-    page += R"(>
+      page += gpio16State ? "checked" : "";
+      page += R"(>
       <span class="slider"></span>
-      </label>
-      </div>
-    </h1>
+    </label>
+  </div>
+
+  </body>
 
     <script>
       // Function to update the <meter> element with the Amps1_TRMS
@@ -309,7 +321,7 @@ void define_page() {
     if (request->hasArg("state")) {
       String state = request->arg("state");
       gpio25State = (state == "on");
-      digitalWrite(25, gpio25State ? HIGH : LOW); // Set GPIO25 state
+      digitalWrite(25, gpio25State ? LOW : HIGH); // Set GPIO25 state
     }
     request->send(200, "text/plain", gpio25State ? "on" : "off");
   });
@@ -325,7 +337,7 @@ void define_page() {
     if (request->hasArg("state")) {
       String state = request->arg("state");
       gpio22State = (state == "on");
-      digitalWrite(22, gpio22State ? HIGH : LOW); // Set GPIO22 state
+      digitalWrite(22, gpio22State ? LOW : HIGH); // Set GPIO22 state
     }
     request->send(200, "text/plain", gpio22State ? "on" : "off");
   });
@@ -341,7 +353,7 @@ void define_page() {
     if (request->hasArg("state")) {
       String state = request->arg("state");
       gpio21State = (state == "on");
-      digitalWrite(21, gpio21State ? HIGH : LOW); // Set GPIO21 state
+      digitalWrite(21, gpio21State ? LOW : HIGH); // Set GPIO21 state
     }
     request->send(200, "text/plain", gpio21State ? "on" : "off");
   });
@@ -357,7 +369,7 @@ void define_page() {
     if (request->hasArg("state")) {
       String state = request->arg("state");
       gpio19State = (state == "on");
-      digitalWrite(19, gpio19State ? HIGH : LOW); // Set GPIO19 state
+      digitalWrite(19, gpio19State ? LOW : HIGH); // Set GPIO19 state
     }
     request->send(200, "text/plain", gpio19State ? "on" : "off");
   });
@@ -373,7 +385,7 @@ void define_page() {
     if (request->hasArg("state")) {
       String state = request->arg("state");
       gpio17State = (state == "on");
-      digitalWrite(17, gpio17State ? HIGH : LOW); // Set GPIO17 state
+      digitalWrite(17, gpio17State ? LOW : HIGH); // Set GPIO17 state
     }
     request->send(200, "text/plain", gpio17State ? "on" : "off");
   });
@@ -389,7 +401,7 @@ void define_page() {
     if (request->hasArg("state")) {
       String state = request->arg("state");
       gpio16State = (state == "on");
-      digitalWrite(16, gpio16State ? HIGH : LOW); // Set GPIO16 state
+      digitalWrite(16, gpio16State ? LOW : HIGH); // Set GPIO16 state
     }
     request->send(200, "text/plain", gpio16State ? "on" : "off");
   });

@@ -105,8 +105,8 @@ void setup() {
   tft.setRotation(1);
   tft.setTextWrap(true, true);
   tft.setCursor(0, 0);
-  tft.setTextSize(1);
-
+  tft.setTextSize(2);
+  tft.setTextColor(TFT_YELLOW, TFT_BLACK);
   
   for(int i=0;i<8;i++) {device_id[i] = char(EEPROM.read(device_id_addr+i));}
   setting = char(EEPROM.read(setting_addr));
@@ -166,6 +166,8 @@ void loop() {
 
     while( true ) { 
       ArduinoOTA.handle();
+
+
       
       if (millis() % 17 == 0) {
         stats1.input(analogRead(36));
@@ -192,6 +194,8 @@ void loop() {
         amphour4 += Amps4_TRMS * 2/3600;
         amphour5 += Amps5_TRMS * 2/3600;
         amphour6 += Amps6_TRMS * 2/3600;
+
+        publish_reporting();
       }
     }
     delay(50);
